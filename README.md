@@ -42,6 +42,7 @@ Connect your ESP32 to the target SPI flash chip using jumper wires. You can choo
 <br>
 
 <img width="224" height="119" alt="components_8pin_spi" src="https://github.com/user-attachments/assets/ede52172-4e94-4c04-ac10-dcfe113525b1" />
+
 **standard SPI Flash Pinout**
 
 >[!WARNING]
