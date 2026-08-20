@@ -2,11 +2,11 @@ import serial
 import time
 import sys
 
-TOTAL_SIZE = 2 * 1024 * 1024  # 2MB Flash
+TOTAL_SIZE = 64 * 1024  
 BAUD_RATE = 921600
 
 def wait_for_prompt(ser, prompt_text):
-    """منتظر دریافت متن پرامپت از سمت میکرو می‌ماند"""
+    
     buffer = b""
     target = prompt_text.encode('utf-8')
     while target not in buffer:
@@ -14,7 +14,7 @@ def wait_for_prompt(ser, prompt_text):
         if not ch:
             raise TimeoutError(f"Timeout waiting for: {prompt_text}")
         buffer += ch
-    # چاپ آنچه تا کنون دریافت شده
+    
     print(buffer.decode(errors='ignore'), end="")
     sys.stdout.flush()
 
@@ -30,14 +30,14 @@ def main():
         ser = serial.Serial(port, BAUD_RATE, timeout=5)
         print(f"Connecting to {port}...")
         
-        # تاخیر برای ریست شدن میکرو و پاک‌سازی بافر ورودی
+        
         time.sleep(1.5)
         ser.reset_input_buffer()
         
-        # اگر هنوز پرامپت نیامده یک اینتر بفرستیم تا میکرو تحریک شود
+        
         ser.write(b"\n")
         
-        # مراحل ارسال تنظیمات پین‌ها
+        
         wait_for_prompt(ser, "Enter MISO pin: ")
         ser.write(f"{miso}\n".encode())
         
@@ -55,7 +55,7 @@ def main():
         
         print("\nWaiting for dump stream to begin...")
         
-        # منتظر سیگنال شروع استریم
+        
         line = ser.readline()
         while b"READY_FOR_STREAM" not in line:
             if not line:

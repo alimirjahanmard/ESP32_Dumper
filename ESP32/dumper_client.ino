@@ -1,7 +1,7 @@
 #include <SPI.h>
 
-#define FLASH_SIZE_BYTES (2 * 1024 * 1024) // 2MB
-#define SPI_SPEED 1000000                   // 1MHz
+#define FLASH_SIZE_BYTES (64 * 1024) 
+#define SPI_SPEED 1000000                   
 #define BUFFER_SIZE 1024
 uint8_t buffer[BUFFER_SIZE];
 
@@ -33,21 +33,20 @@ void dumpExternalFlash(int miso_pin, int mosi_pin, int sck_pin, int cs_pin) {
   
   SPI.beginTransaction(SPISettings(SPI_SPEED, MSBFIRST, SPI_MODE0));
   
-  // ارسال هدر و اندازه کل دیتا
   Serial.println("READY_FOR_STREAM");
   
   for (uint32_t addr = 0; addr < FLASH_SIZE_BYTES; addr += BUFFER_SIZE) {
     digitalWrite(cs_pin, LOW);
-    SPI.transfer(0x03); // دستور خواندن استاندارد SPI Flash (Read Array)
+    SPI.transfer(0x03); 
     SPI.transfer((addr >> 16) & 0xFF);
     SPI.transfer((addr >> 8) & 0xFF);
     SPI.transfer(addr & 0xFF);
     SPI.transferBytes(NULL, buffer, BUFFER_SIZE);
     digitalWrite(cs_pin, HIGH);
     
-    // ارسال دیتا به صورت خام و باینری
+   
     Serial.write(buffer, BUFFER_SIZE);
-    Serial.flush(); // اطمینان از تخلیه بافر سریال
+    Serial.flush(); 
   }
   
   SPI.endTransaction();
